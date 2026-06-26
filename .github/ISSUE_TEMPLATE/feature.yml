@@ -1,0 +1,153 @@
+name: Funcionalidade
+description: Issue de funcionalidade — passo 1 do ciclo de desenvolvimento
+title: "F-NN.M — <título exato do módulo>"
+labels: ["type:feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issue de funcionalidade do Rota Saúde. Os campos abaixo materializam o
+        passo 1 do [ciclo de desenvolvimento](https://github.com/rotasaude/docs/blob/main/docs/ciclo-desenvolvimento.md).
+        **Sem qualquer campo obrigatório preenchido, a issue não sai de `Não iniciado`.**
+
+  - type: input
+    id: f_id
+    attributes:
+      label: F-ID
+      description: |
+        Identificador da funcionalidade no módulo (`F-NN.M`).
+        Consultar `docs/modulos/NN--<slug>.md` ou `docs/funcionalidades-mvp.csv`.
+      placeholder: "F-06.9"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Módulo
+      description: Módulo de `docs/modulos/`.
+      options:
+        - "mod-01 — WhatsApp"
+        - "mod-02 — Conversação"
+        - "mod-03 — Triagem"
+        - "mod-04 — Relatórios"
+        - "mod-05 — Dashboard"
+        - "mod-06 — Identidade/Acesso"
+        - "mod-07 — LGPD/Auditoria"
+        - "mod-08 — Agendamento"
+        - "mod-09 — Unidades"
+        - "mod-10 — Profissionais"
+        - "mod-11 — Território"
+        - "mod-12 — Campanhas"
+        - "mod-13 — Acompanhamento"
+        - "mod-14 — Analytics"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: apps
+    attributes:
+      label: Superfície(s) afetada(s)
+      description: |
+        Quais aplicações o trabalho toca. Múltiplas seleções OK.
+        Marcar **`app:*` correspondente** como label depois de criada a issue.
+      options:
+        - label: "api (backend Rails)"
+        - label: "admin (plataforma, platform_operator)"
+        - label: "dashboard (cidade)"
+        - label: "wpda (cidadão)"
+        - label: "contracts (contratos compartilhados)"
+        - label: "docs (documentação)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: adrs
+    attributes:
+      label: ADRs governantes
+      description: |
+        Decisões arquiteturais que regem este trabalho — referência por URL
+        completa (ADR 0002 — código e ADR vivem em repos distintos; nunca path relativo).
+      placeholder: |
+        - https://github.com/rotasaude/docs/blob/main/docs/adr/0009.md
+        - https://github.com/rotasaude/docs/blob/main/docs/adr/0012.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critério de aceite
+      description: |
+        Lista enumerada do que precisa ser verdade para a funcionalidade ser
+        considerada `Implementada`. Cada item testável.
+      placeholder: |
+        1. Endpoint `POST /...` aceita payload conforme schema.
+        2. Falha de validação retorna `Result.fail(:reason)` traduzido em 422.
+        3. Evento `<dominio>.<acao>` publicado ao final do command.
+    validations:
+      required: true
+
+  - type: textarea
+    id: tests
+    attributes:
+      label: Camadas de teste exigidas
+      description: |
+        As três camadas mínimas (passo 4 do ciclo).
+        Sem todas as camadas presentes no PR, não merge.
+      value: |
+        **Invariante (o que o ADR exige nunca violar):**
+        -
+
+        **Comportamental (caso feliz + bordas):**
+        -
+
+        **Regressão (bug corrigido — só se aplicável):**
+        -
+    validations:
+      required: true
+
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out-of-scope explícito
+      description: |
+        O que **não** está nesta issue, mesmo que pareça relacionado.
+        Funciona como contrato com o revisor.
+      placeholder: |
+        - Migração de dados históricos (issue separada).
+        - UI no admin (módulo X, fora desta).
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependências (opcional)
+      description: |
+        Outras issues que precisam estar `Verificadas` antes desta começar.
+      placeholder: |
+        - Bloqueada por rotasaude/api#42
+        - Relacionada a rotasaude/dashboard#17
+
+  - type: input
+    id: target_release
+    attributes:
+      label: Target release (opcional)
+      description: |
+        Marco do módulo previsto (ex.: `triagem-v0.2`).
+        Releases casam com módulo, não com calendário.
+      placeholder: "triagem-v0.2"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        **Depois de criar a issue:**
+        - Marcar as labels: `mod-NN` (uma), `app:*` (uma ou mais), `type:feature`,
+          `risco:<baixo|medio|alto>`.
+        - Adicionar ao board: `gh project item-add <num> --owner rotasaude --url <url-da-issue>`.
+        - Setar `Module` e `Type` no board (`gh project item-edit`).
+        - Se a funcionalidade toca mais de um repo, abrir uma issue **por repo**
+          com o mesmo F-ID no título e cross-references entre elas.

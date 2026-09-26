@@ -7,8 +7,8 @@ body:
     attributes:
       value: |
         Issue de funcionalidade do Rota Saúde. Os campos abaixo materializam o
-        passo 1 do [ciclo de desenvolvimento](https://github.com/rotasaude/docs/blob/main/docs/ciclo-desenvolvimento.md).
-        **Sem qualquer campo obrigatório preenchido, a issue não sai de `Não iniciado`.**
+        passo 1 do [ciclo de desenvolvimento](https://github.com/rotasaude/docs/blob/main/ciclo-desenvolvimento.md).
+        **Sem qualquer campo obrigatório preenchido, a issue não sai de `Not Started`.**
 
   - type: input
     id: f_id
@@ -16,7 +16,7 @@ body:
       label: F-ID
       description: |
         Identificador da funcionalidade no módulo (`F-NN.M`).
-        Consultar `docs/modulos/NN--<slug>.md` ou `docs/funcionalidades-mvp.csv`.
+        Consultar `modulos/NN--<slug>.md` ou `funcionalidades-mvp.csv` no repo `rotasaude/docs`.
       placeholder: "F-06.9"
     validations:
       required: true
@@ -25,7 +25,7 @@ body:
     id: module
     attributes:
       label: Módulo
-      description: Módulo de `docs/modulos/`.
+      description: Módulo de `modulos/` no repo `rotasaude/docs`.
       options:
         - "mod-01 — WhatsApp"
         - "mod-02 — Conversação"
@@ -55,6 +55,7 @@ body:
         - label: "api (backend Rails)"
         - label: "admin (plataforma, platform_operator)"
         - label: "dashboard (cidade)"
+        - label: "maintenance (API de manutenção, superusuário)"
         - label: "wpda (cidadão)"
         - label: "contracts (contratos compartilhados)"
         - label: "docs (documentação)"
@@ -69,8 +70,8 @@ body:
         Decisões arquiteturais que regem este trabalho — referência por URL
         completa (ADR 0002 — código e ADR vivem em repos distintos; nunca path relativo).
       placeholder: |
-        - https://github.com/rotasaude/docs/blob/main/docs/adr/0009.md
-        - https://github.com/rotasaude/docs/blob/main/docs/adr/0012.md
+        - https://github.com/rotasaude/docs/blob/main/adr/0009.md
+        - https://github.com/rotasaude/docs/blob/main/adr/0012.md
     validations:
       required: true
 
@@ -80,7 +81,7 @@ body:
       label: Critério de aceite
       description: |
         Lista enumerada do que precisa ser verdade para a funcionalidade ser
-        considerada `Implementada`. Cada item testável.
+        considerada pronta (`Done` no board). Cada item testável.
       placeholder: |
         1. Endpoint `POST /...` aceita payload conforme schema.
         2. Falha de validação retorna `Result.fail(:reason)` traduzido em 422.
@@ -125,7 +126,7 @@ body:
     attributes:
       label: Dependências (opcional)
       description: |
-        Outras issues que precisam estar `Verificadas` antes desta começar.
+        Outras issues que precisam estar `Verified` antes desta começar.
       placeholder: |
         - Bloqueada por rotasaude/api#42
         - Relacionada a rotasaude/dashboard#17
@@ -148,6 +149,6 @@ body:
         - Marcar as labels: `mod-NN` (uma), `app:*` (uma ou mais), `type:feature`,
           `risco:<baixo|medio|alto>`.
         - Adicionar ao board: `gh project item-add <num> --owner rotasaude --url <url-da-issue>`.
-        - Setar `Module` e `Type` no board (`gh project item-edit`).
+        - Setar `Module` e `Work type` no board (`gh project item-edit`).
         - Se a funcionalidade toca mais de um repo, abrir uma issue **por repo**
           com o mesmo F-ID no título e cross-references entre elas.

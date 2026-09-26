@@ -1,0 +1,113 @@
+name: Verificação humana
+description: Auditar uma funcionalidade Done e movê-la (ou não) para Verified. Postura A do board — só humano promove.
+title: "[VER-F-XX.Y] "
+labels: ["type:verification"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Esta issue é o ato humano que move uma funcionalidade de `Done` para
+        `Verified` no board. Agente não pode promover; se encontrar problema,
+        devolve para `In Progress` e abre issue de Desvio.
+
+        Leia o [ciclo de desenvolvimento](https://github.com/rotasaude/docs/blob/main/ciclo-desenvolvimento.md), seção "Gates resumidos".
+
+  - type: input
+    id: funcionalidade_id
+    attributes:
+      label: ID da funcionalidade verificada
+      description: Identificador no formato F-XX.Y, conforme `modulos/` no repo `rotasaude/docs`.
+      placeholder: F-03.11
+    validations:
+      required: true
+
+  - type: input
+    id: issue_funcionalidade
+    attributes:
+      label: Issue da funcionalidade
+      description: Link para a issue de tipo Funcionalidade que está sendo verificada.
+      placeholder: "#147"
+    validations:
+      required: true
+
+  - type: input
+    id: modulo
+    attributes:
+      label: Módulo
+      description: Doc do módulo no repo `rotasaude/docs`.
+      placeholder: modulos/03--triagem.md
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: PR(s) que implementou
+      description: Lista de PRs (mergeados) que materializaram a funcionalidade.
+      placeholder: "#152, #155"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: camadas_auditadas
+    attributes:
+      label: Camadas de teste auditadas
+      description: |
+        Marcar SÓ depois de inspecionar o teste correspondente. "Existe um
+        teste com esse nome" não é auditoria — leia o teste, confira que
+        verifica o que deveria.
+      options:
+        - label: "Invariante — teste cobre o que o ADR exige nunca violar"
+          required: true
+        - label: "Comportamental — caso feliz E pelo menos um caso de borda"
+          required: true
+        - label: "Regressão — se aplicável, teste reproduz o bug antes da correção"
+          required: false
+
+  - type: textarea
+    id: adrs_reavaliados
+    attributes:
+      label: ADRs reavaliados
+      description: |
+        Para cada ADR governante, dizer se o código realmente honra a
+        decisão. Não basta consumir o ADR — tem que preservar a invariante.
+      placeholder: |
+        - 0009 (protocol engine): publicar exige role protocol_publisher. CONFIRMADO em policy_spec.rb.
+        - 0011 (step-up MFA): publicação exige TOTP nos últimos 5min. CONFIRMADO em request_spec.rb:142.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidencia
+    attributes:
+      label: Evidência adicional
+      description: Saída de teste relevante, screenshot, log, ou referência ao schema.
+      placeholder: |
+        - Suíte: 38 examples, 0 failures, 0 pending
+        - Schema: tabela protocols.published_by NOT NULL — migration #20260623_0001
+    validations:
+      required: false
+
+  - type: dropdown
+    id: decisao
+    attributes:
+      label: Decisão da verificação
+      options:
+        - "Verificado — promove para Verified no board"
+        - "Fica em Done — encontrou bug não-bloqueante; abre tarefa nova"
+        - "Divergente — encontrou desvio em relação ao ADR; volta para In Progress e abre issue de Desvio"
+    validations:
+      required: true
+
+  - type: textarea
+    id: observacoes
+    attributes:
+      label: Observações
+      description: Dívida menor identificada, gaps de teste aceitos, justificativas.
+      placeholder: |
+        - Falta teste de regressão para revogação de membership em sessão ativa.
+          Aberto como F-06.10b.
+        - Cobertura de bordas do step-up: tolerância de 5min validada; refresh
+          de janela não testado (aceito como dívida menor).
+    validations:
+      required: false

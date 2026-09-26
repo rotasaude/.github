@@ -1,8 +1,8 @@
 # .github — padrões da organização rotasaude
 
 Repositório especial do GitHub: o que está em `.github/` aqui vale como padrão
-para **todos os repositórios da org** que não tiverem o próprio. Hoje isso é o
-template de issue de funcionalidade.
+para **todos os repositórios da org** que não tiverem o próprio. Hoje isso são
+os cinco templates de issue.
 
 ## A organização
 
@@ -30,7 +30,11 @@ armadilhas. Comece pelo [`docs`](https://github.com/rotasaude/docs).
 
 | Arquivo | O que faz |
 |---|---|
-| [`.github/ISSUE_TEMPLATE/feature.yml`](.github/ISSUE_TEMPLATE/feature.yml) | Issue de **funcionalidade** (`F-NN.M`): passo 1 do [ciclo de desenvolvimento](https://github.com/rotasaude/docs/blob/main/ciclo-desenvolvimento.md). Pede F-ID, módulo, apps tocadas, ADRs, critério de aceite, camadas de teste, out-of-scope, dependências e release-alvo |
+| [`feature.yml`](.github/ISSUE_TEMPLATE/feature.yml) | **Funcionalidade** (`F-NN.M`, label `type:feature`): passo 1 do [ciclo de desenvolvimento](https://github.com/rotasaude/docs/blob/main/ciclo-desenvolvimento.md). Pede F-ID, módulo, apps tocadas, ADRs, critério de aceite, camadas de teste, out-of-scope, dependências e release-alvo |
+| [`adr.yml`](.github/ISSUE_TEMPLATE/adr.yml) | **ADR** (`type:adr`): decidir, não implementar. Fecha quando `adr/NNNN.md` entra no `docs` |
+| [`desvio.yml`](.github/ISSUE_TEMPLATE/desvio.yml) | **Desvio** (`type:drift`): divergência entre ADR e código, com evidência, gravidade e eixo de risco |
+| [`pulse.yml`](.github/ISSUE_TEMPLATE/pulse.yml) | **Pulse semanal** (`type:pulse`): discussão do relatório semanal de drift; fecha quando os desvios viram issues próprias |
+| [`verificacao.yml`](.github/ISSUE_TEMPLATE/verificacao.yml) | **Verificação humana** (`type:verification`): audita uma funcionalidade `Done` e decide se ela vai para `Verified` |
 
 ## Como o trabalho é rastreado
 
@@ -40,10 +44,11 @@ armadilhas. Comece pelo [`docs`](https://github.com/rotasaude/docs).
 - As issues entram no **GitHub Project #1** da org. O status anda por
   `Not Started` → `In Progress` → `Done` → `Verified`; só um humano promove
   para `Verified`.
-- **Labels** (criadas em cada repo): `mod-01`…`mod-14`, `app:api`,
-  `app:admin`, `app:dashboard`, `app:wpda`, `app:contracts`, `app:docs`,
-  `type:feature`, `type:chore`, `type:hotfix`, `type:adr` e
-  `risco:baixo|medio|alto`.
+- **Labels** (os mesmos 31 em cada repo de app, `contracts` e `docs`):
+  `mod-01`…`mod-14`, `app:api`, `app:admin`, `app:dashboard`, `app:wpda`,
+  `app:maintenance`, `app:contracts`, `app:docs`, `type:feature`,
+  `type:chore`, `type:hotfix`, `type:adr`, `type:drift`, `type:pulse`,
+  `type:verification` e `risco:baixo|medio|alto`.
 - Funcionalidade que toca mais de um repo vira **uma issue por repo**, com o
   mesmo F-ID no título e referências cruzadas.
 - Referência a ADR vai sempre por **URL completa** do repo `docs`, nunca por

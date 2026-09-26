@@ -1,0 +1,108 @@
+name: Pulse semanal
+description: Registro do relatório semanal de drift. Uma issue por semana, fechada quando os desvios encontrados viram issues Desvio próprias.
+title: "[PULSE YYYY-MM-DD] "
+labels: ["type:pulse"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Esta issue **não substitui** o markdown do relatório semanal em
+        `relatorios/`, no repo `rotasaude/docs`. Ela é o **ponto de discussão** no board: cards
+        Desvio nascem a partir dela, decisões humanas ficam registradas
+        aqui em comentário.
+
+  - type: input
+    id: data_relatorio
+    attributes:
+      label: Data do relatório
+      description: Data ISO em que o drift report rodou.
+      placeholder: "2026-06-22"
+    validations:
+      required: true
+
+  - type: input
+    id: link_relatorio
+    attributes:
+      label: Arquivo do relatório
+      description: Caminho no repo `rotasaude/docs`.
+      placeholder: relatorios/2026-06-22.md
+    validations:
+      required: true
+
+  - type: input
+    id: link_baseline
+    attributes:
+      label: Baseline anterior
+      description: Caminho do relatório da semana anterior usado como referência.
+      placeholder: relatorios/2026-06-15.md
+    validations:
+      required: false
+
+  - type: dropdown
+    id: alarmes
+    attributes:
+      label: Alarmes detectados
+      options:
+        - "Não"
+        - "Sim — clínica"
+        - "Sim — LGPD"
+        - "Sim — operacional"
+        - "Sim — múltiplos"
+    validations:
+      required: true
+
+  - type: textarea
+    id: sumario
+    attributes:
+      label: Sumário em 1-3 linhas
+      description: O que mudou desde a baseline anterior. Não repetir o relatório; aponte o delta.
+      placeholder: |
+        2 funcionalidades novas verificadas (F-03.13, F-06.17). 1 desvio novo
+        detectado: um job atribui `Current.city` fora de `CityConnection.with`
+        (viola ADR 0020). 0 ADRs novos.
+    validations:
+      required: true
+
+  - type: textarea
+    id: desvios_novos
+    attributes:
+      label: Desvios novos identificados
+      description: |
+        Lista. Para cada desvio, abrir issue de Desvio separada e linkar aqui
+        DEPOIS de criada. Esta lista é o ponto de partida, não o registro
+        final.
+      placeholder: |
+        - Current.city fora de CityConnection.with → #DES-23 (a abrir)
+        - schema.rb sem alterações desde a baseline → sem ação
+    validations:
+      required: false
+
+  - type: textarea
+    id: desvios_persistentes
+    attributes:
+      label: Desvios persistentes (carregam da semana anterior)
+      description: Itens já abertos como Desvio que ainda não foram resolvidos.
+      placeholder: |
+        - #DES-15 (idempotência HTTP) — sem movimento
+        - #DES-17 (consent.revoked sem consumer) — em discussão
+    validations:
+      required: false
+
+  - type: textarea
+    id: verificacoes_pendentes
+    attributes:
+      label: Funcionalidades Done aguardando verificação
+      description: Lista de IDs no formato F-XX.Y. Pulse expõe a dívida de verificação.
+      placeholder: |
+        - F-06.5 (step-up MFA) — há 2 semanas
+        - F-07.12 (Platform.audit para eventos de identidade) — há 1 semana
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **Fluxo de fechamento:** esta issue fecha quando todos os desvios
+        novos viraram issues de Desvio próprias. Comentários posteriores
+        à criação registram decisões humanas tomadas a partir do relatório.

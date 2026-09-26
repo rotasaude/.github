@@ -1,0 +1,107 @@
+name: ADR (decisão arquitetural)
+description: Abrir quando uma decisão arquitetural nova precisa ser tomada. NÃO é para implementar — é para decidir. Implementação vira issue de Funcionalidade depois.
+title: "[ADR-XXXX] "
+labels: ["type:adr"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Esta issue **não fecha** quando o código está pronto. Ela fecha quando
+        o arquivo `adr/NNNN.md` é commitado no repo `rotasaude/docs` com status `Aceita`
+        (ou `Proposta` com escopo declarado). Implementação que materializa
+        a decisão vai em issue separada de Funcionalidade.
+
+        Leia o [ciclo de desenvolvimento](https://github.com/rotasaude/docs/blob/main/ciclo-desenvolvimento.md) antes de submeter.
+        No board, use `Work type` = `adr`.
+
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto
+      description: Qual a força que está pedindo decisão? Que situação tornou o status quo inadequado?
+      placeholder: |
+        A chave da plataforma deriva a chave de cada cidade (ADR 0020). Hoje
+        não há procedimento para rotacioná-la: o método antigo trancaria todas
+        as cidades de uma vez. Sem decisão, um vazamento suspeito dessa chave
+        não tem resposta.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas consideradas
+      description: Liste 2-4 alternativas reais (não palhas de espantar). Cada uma com 1-3 linhas de trade-off.
+      placeholder: |
+        1. Rekey por cidade, uma de cada vez, com a cidade suspensa — reusa
+           `city:rekey`; exige janela de manutenção por cidade.
+        2. Duas chaves de plataforma válidas durante a transição — sem
+           suspensão; a derivação passa a consultar duas raízes.
+        3. Envelope encryption com KMS — rotação sem reescrever dado; nova
+           dependência de infraestrutura.
+    validations:
+      required: true
+
+  - type: textarea
+    id: decisao
+    attributes:
+      label: Decisão proposta
+      description: Uma das alternativas (ou síntese), de forma concreta. O que vai ser feito.
+      placeholder: |
+        Alternativa 1 — rekey por cidade, com a cidade suspensa e a mesma
+        quarentena de `city:rotate_key`; a chave antiga só sai depois da última
+        cidade.
+    validations:
+      required: true
+
+  - type: textarea
+    id: consequencias
+    attributes:
+      label: Consequências esperadas
+      description: O que muda no sistema. Ganhos e perdas. Reversibilidade.
+      placeholder: |
+        - Ganho: vazamento da chave da plataforma passa a ter resposta.
+        - Perda: cada cidade fica fora do ar durante o próprio rekey.
+        - Reversibilidade: enquanto a chave antiga existir, dá para voltar.
+    validations:
+      required: true
+
+  - type: input
+    id: adrs_relacionados
+    attributes:
+      label: ADRs que esta decisão toca
+      description: Lista separada por vírgula. Indique se toca, esclarece, ou apenas consome.
+      placeholder: "revisa 0013 (custódia de chave); consome 0020 (chave por cidade); relacionado a 0014 (auditoria)"
+    validations:
+      required: false
+
+  - type: input
+    id: modulo
+    attributes:
+      label: Módulo afetado
+      description: Doc do módulo no repo `rotasaude/docs`, se aplicável.
+      placeholder: modulos/07--lgpd-auditoria.md
+    validations:
+      required: false
+
+  - type: dropdown
+    id: status_proposto
+    attributes:
+      label: Status proposto ao abrir o ADR
+      options:
+        - Proposta (esqueleto)
+        - Proposta (escopo fechado)
+        - Aceita
+    validations:
+      required: true
+
+  - type: textarea
+    id: em_aberto
+    attributes:
+      label: O que esta decisão NÃO resolve
+      description: Itens explicitamente deixados em aberto, para que ADRs futuros possam pegar.
+      placeholder: |
+        - Rotação da chave de assinatura dos relatórios.
+        - Restore de cidade já desligada.
+    validations:
+      required: false

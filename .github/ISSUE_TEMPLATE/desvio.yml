@@ -1,0 +1,119 @@
+name: Desvio (drift)
+description: Registrar divergência entre desenho (ADR) e código. Pode ser aberto por humano ou agente do drift report semanal.
+title: "[DES-XX] "
+labels: ["type:drift"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Desvio = código que existe sem ADR que o justifique, OU ADR aceito
+        sem código que o materialize, OU divergência observável entre os dois.
+        Bug operacional de runtime NÃO é desvio — vai para o tracker de
+        incidente. Aqui é drift estrutural.
+
+        Quem encontra abre. Quem decide o próximo passo é humano.
+
+  - type: dropdown
+    id: tipo_desvio
+    attributes:
+      label: Tipo de desvio
+      options:
+        - "Código sem ADR (implementação introduz decisão arquitetural não documentada)"
+        - "ADR sem código (decisão aceita há tempo, implementação ausente)"
+        - "Divergência de schema (schema.rb difere do que ADRs descrevem)"
+        - "Divergência comportamental (código consome ADR mas viola invariante)"
+        - "ADR contraditório (dois ADRs aceitos descrevem o mesmo de formas incompatíveis)"
+        - "Regressão crítica (funcionalidade Verified parou de funcionar)"
+        - "Outro"
+    validations:
+      required: true
+
+  - type: input
+    id: adrs_envolvidos
+    attributes:
+      label: ADR(s) envolvido(s)
+      description: Lista separada por vírgula. Use "nenhum" se for "código sem ADR".
+      placeholder: "0005, 0020"
+    validations:
+      required: true
+
+  - type: input
+    id: modulo
+    attributes:
+      label: Módulo afetado
+      description: Doc do módulo no repo `rotasaude/docs`, se aplicável.
+      placeholder: modulos/07--lgpd-auditoria.md
+    validations:
+      required: false
+
+  - type: textarea
+    id: evidencia
+    attributes:
+      label: Evidência
+      description: |
+        Onde o desvio aparece. Arquivo + linha quando possível. Trecho curto
+        (até 10 linhas) só se essencial.
+      placeholder: |
+        `api/app/jobs/concerns/idempotent_consumer.rb:8`
+        ```ruby
+        ProcessedEvent.create!(event_id:, consumer: self.class.name)
+        handle(**payload.symbolize_keys)  # ← chamada externa AQUI; se falhar, retry vira no-op
+        ```
+        ADR 0005 manda envolver `create!` + `handle` em transação, e isso
+        resolve o caso em banco mas não o caso HTTP. Código atual não
+        protege nenhum dos dois.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: gravidade
+    attributes:
+      label: Gravidade
+      description: |
+        Critério: o que acontece se o desvio NÃO for corrigido?
+      options:
+        - "regressão crítica (perda de funcionalidade verificada; bloqueio de release)"
+        - "risco clínico (paciente afetado: alerta perdido, classificação errada, dado vazado)"
+        - "risco LGPD (privacidade comprometida; obrigação legal não cumprida)"
+        - "risco operacional (degradação, manutenção mais cara; sem afetar usuário diretamente)"
+        - "documental (descrição em ADR ou módulo desatualizada; sem efeito em produção)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risco
+    attributes:
+      label: Eixo de risco
+      description: |
+        Em que eixo o risco cai. NÃO confundir com gravidade, nem com o label
+        `risco:baixo|medio|alto`, que mede o nível.
+      options:
+        - "Clínica"
+        - "LGPD"
+        - "Operacional"
+        - "Normal"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proximo_passo_sugerido
+    attributes:
+      label: Próximo passo sugerido
+      description: |
+        Quem abre não decide — sugere. Decisão final é humana e pode mudar
+        após discussão.
+      placeholder: |
+        Abrir ADR para tratar idempotência HTTP separado de banco (já listado
+        no README como item em aberto). Em paralelo, corrigir o caso em banco
+        envolvendo create! + handle em transação, como 0005 já permite.
+    validations:
+      required: false
+
+  - type: input
+    id: origem
+    attributes:
+      label: Origem da detecção
+      description: Quem ou o que detectou.
+      placeholder: "drift report semanal 2026-06-22, item §A.2"
+    validations:
+      required: true

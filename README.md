@@ -2,7 +2,7 @@
 
 Repositório especial do GitHub: o que está em `.github/` aqui vale como padrão
 para **todos os repositórios da org** que não tiverem o próprio. Hoje isso são
-os cinco templates de issue.
+os seis templates de issue.
 
 ## A organização
 
@@ -35,6 +35,7 @@ armadilhas. Comece pelo [`docs`](https://github.com/rotasaude/docs).
 | [`desvio.yml`](.github/ISSUE_TEMPLATE/desvio.yml) | **Desvio** (`type:drift`): divergência entre ADR e código, com evidência, gravidade e eixo de risco |
 | [`pulse.yml`](.github/ISSUE_TEMPLATE/pulse.yml) | **Pulse semanal** (`type:pulse`): discussão do relatório semanal de drift; fecha quando os desvios viram issues próprias |
 | [`verificacao.yml`](.github/ISSUE_TEMPLATE/verificacao.yml) | **Verificação humana** (`type:verification`): audita uma funcionalidade `Done` e decide se ela vai para `Verified` |
+| [`pendencia-de-ciclo.yml`](.github/ISSUE_TEMPLATE/pendencia-de-ciclo.yml) | **Pendência de ciclo** (`ciclo:NN`): item surgido no desenvolvimento para tratar no encerramento do ciclo ou depois. Pede contexto, por que importa, opções, importância com justificativa e critério de encerramento. Vai para o Project #2 |
 
 ## Como o trabalho é rastreado
 
@@ -44,11 +45,17 @@ armadilhas. Comece pelo [`docs`](https://github.com/rotasaude/docs).
 - As issues entram no **GitHub Project #1** da org. O status anda por
   `Not Started` → `In Progress` → `Done` → `Verified`; só um humano promove
   para `Verified`.
+- Pendências que surgem no caminho (decisão pendente, risco operacional,
+  ajuste, contrato, escopo adiado) vão para o **GitHub Project #2,
+  Pendências de Ciclo**, e não para o #1. Campos: Ciclo, Origem, Tratar em,
+  Importância (Crítica · Alta · Média · Baixa), Natureza e Módulo. Status:
+  `A triar` → `Decidido` → `Em tratamento` → `Resolvido` · `Adiado`.
 - **Labels** (os mesmos 31 em cada repo de app, `contracts` e `docs`):
   `mod-01`…`mod-14`, `app:api`, `app:admin`, `app:dashboard`, `app:wpda`,
   `app:maintenance`, `app:contracts`, `app:docs`, `type:feature`,
   `type:chore`, `type:hotfix`, `type:adr`, `type:drift`, `type:pulse`,
-  `type:verification` e `risco:baixo|medio|alto`.
+  `type:verification` e `risco:baixo|medio|alto`, mais `ciclo:01` para as
+  pendências de ciclo.
 - Funcionalidade que toca mais de um repo vira **uma issue por repo**, com o
   mesmo F-ID no título e referências cruzadas.
 - Referência a ADR vai sempre por **URL completa** do repo `docs`, nunca por

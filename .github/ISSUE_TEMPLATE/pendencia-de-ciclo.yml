@@ -1,0 +1,70 @@
+name: Pendência de ciclo
+description: Registrar um item surgido no desenvolvimento para tratar no encerramento do ciclo ou depois (decisão pendente, risco operacional, ajuste, escopo adiado).
+title: "[CICLO-NN] "
+labels: ["ciclo:01"]
+projects: ["rotasaude/2"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Esta issue vai para o board **Pendências de Ciclo** (Project #2), não para o board de execução.
+        Preencha no board os campos Ciclo, Origem, Tratar em, Importância, Natureza e Módulo.
+        Troque o label `ciclo:01` se o item for de outro ciclo.
+
+        Importância:
+        - **Crítica**: bloqueia o go-live ou traz risco legal ou clínico.
+        - **Alta**: afeta uma cidade real logo que ela entrar em produção.
+        - **Média**: risco condicional, que só aparece em certa circunstância.
+        - **Baixa**: ajuste visual ou dívida sem efeito no usuário.
+
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto
+      description: Onde surgiu (implementação, verificação, go-live, decisão de escopo), módulo, F-ID e link para o dossiê ou a spec.
+    validations:
+      required: true
+
+  - type: textarea
+    id: por_que_importa
+    attributes:
+      label: Por que importa
+      description: O impacto se não for tratado — para quem, em que situação.
+    validations:
+      required: true
+
+  - type: textarea
+    id: opcoes
+    attributes:
+      label: Opções ou decisão pendente
+      description: Caminhos possíveis, com trade-offs. Se já houver decisão, registre aqui.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: importancia
+    attributes:
+      label: Importância
+      options:
+        - Crítica
+        - Alta
+        - Média
+        - Baixa
+    validations:
+      required: true
+
+  - type: textarea
+    id: justificativa
+    attributes:
+      label: Justificativa da importância
+      description: Por que esta faixa e não a vizinha.
+    validations:
+      required: true
+
+  - type: textarea
+    id: encerramento
+    attributes:
+      label: Critério de encerramento
+      description: O que precisa ser verdade para o item ir a Resolvido (ou o que o leva a Adiado).
+    validations:
+      required: true
